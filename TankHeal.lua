@@ -29,7 +29,7 @@ end
 ----------------------
 
 function TankHeal:Start(msg)
-	if string.find(msg, spellname) then
+	if string.find(spellname, msg) then
 		isInProgress = true
 		startTime = GetTime()
 	end
@@ -50,22 +50,24 @@ end
 -- Utility Functions --
 -----------------------
 
+function TankHeal:Print(msg)
+	DEFAULT_CHAT_FRAME:AddMessage(msg)
+end
+
 function TankHeal:Heal(aSpellname, aCheckTime, aThreshold)	
 	local unitId = self:GetUnitId()
 	if unitId == nil then
 		--self:Print("you do not have a valid target")
 		return
 	end
-	--self:Print(unitId)
 	
 	if not isInProgress then
 		spellname = aSpellname
 		
 		CastSpellByName(spellname)
 		if SpellIsTargeting() then
-		
-		isInProgress = true
-		startTime = GetTime()
+			isInProgress = true
+			startTime = GetTime()
 			SpellTargetUnit(unitId)
 		end
 	else
